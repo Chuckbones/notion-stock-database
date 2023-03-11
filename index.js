@@ -1,23 +1,11 @@
-import { getTickersFromNotion } from "./notion.js"
+import { getTickersFromNotion, updatePrice } from "./notion.js";
 
-const tickersToCheck = await getTickersFromNotion()
+import { getLastStockValueFromTicker } from "./polygon.js";
 
-console.log({ tickersToCheck })
+// get all tickers data to be updated
+const tickersToCheck = await getTickersFromNotion();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// upload data to notion after getting the price
+tickersToCheck.forEach(async (value) => {
+  await updatePrice(value.pageId, await getLastStockValueFromTicker(value.ticker));
+});
